@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
     private RoleRepository roleRepository;
 
     @Autowired
@@ -25,9 +25,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void saveUser(User user) {
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        user.setRoles(roles);
         usersRepository.save(user);
     }
 

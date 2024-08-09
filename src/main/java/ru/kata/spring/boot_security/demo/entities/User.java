@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,16 +15,23 @@ import java.util.Objects;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
+    @Column(nullable = false)
     private Long id;
     @Column(unique = true, nullable = false)
+    @JsonProperty("username")
     private String username;
     @Column (nullable = false)
+    @JsonProperty("password")
     private String password;
     @Column (nullable = false)
+    @JsonProperty("name")
     private String name;
     @Column
+    @JsonProperty("lastName")
     private String lastName;
     @Column (nullable = false)
+    @JsonProperty("age")
     private int age;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
@@ -34,10 +42,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, int age) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
+    public User(User user) {
+        this.username = user.username;
+        this.password = user.password;
+        this.name = user.name;
+        this.lastName = user.lastName;
+        this.age = user.age;
+        this.roles = user.roles;
     }
 
     public void setUsername(String username) {
@@ -128,12 +139,12 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName);
+        return Objects.equals(username, user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, name, lastName);
+        return Objects.hashCode(username);
     }
 
     @Override
